@@ -2,10 +2,13 @@
   position: static;
   width: 1024px;
   height: 768px;
+  float: left;
 }
 
 img {
   width: 100%;
+  opacity: 0;
+  transition: opacity 500ms;
 }
 
 .popup-menu {
@@ -44,4 +47,19 @@ img {
 
 .show {
   transform: rotateY(0);
+  opacity: 1;
+}
+
+#start {
+  float: right;
+  margin: 50px;
+  width: 100px;
+  height: 30px;
+  font-size: large;
+  background: red;
+  color: white;
+}
+
+#start:hover {
+  background: darkred;
 }
