@@ -9,13 +9,14 @@ img {
 }
 
 .popup-menu {
-  display: none;
   position: absolute;
   top: 100px;
   left: 100px;
   height: 64px;
   width: 94px;
   pointer-events: none;
+  transform: rotateY(90deg);
+  transition: transform 300ms;
 }
 
 .border {
@@ -37,6 +38,10 @@ img {
   pointer-events: all;
 }
 
+.choice:hover {
+  background: darkred;
+}
+
 .show {
-  display: block;
+  transform: rotateY(0);
 }
