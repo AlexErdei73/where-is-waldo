@@ -3,11 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <title>Where is Waldo?</title>
-    <link rel="stylesheet" href="css/stules.css" />
+    <link rel="stylesheet" href="./css/styles.css" />
   </head>
   <body>
-    <img alt="waldo picture 1" src="./assets/waldo-1.jpg" />
-
+    <div class="picture-container">
+      <img alt="waldo picture 1" src="./assets/waldo-1.jpg" />
+      <div class="popup-menu">
+        <div class="border"></div>
+        <button type="button" class="choice">Waldo</button>
+        <button type="button" class="choice">Odlaw</button>
+        <button type="button" class="choice">Wizzard</button>
+      </div>
+    </div>
     <!-- The core Firebase JS SDK is always required and must be listed first -->
     <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-app.js"></script>
 
