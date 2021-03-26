@@ -9,6 +9,7 @@ const click = {
   x: 0,
   y: 0,
   target: "",
+  hit: false,
 };
 let userID;
 
@@ -34,9 +35,10 @@ function onClickImg(event) {
 function onClickBtn(event) {
   const target = event.target;
   console.log(target.textContent);
-  click.target = target;
+  click.target = target.textContent;
   popupMenu.classList.remove("show");
   hasImageClicked = false;
+  addClickToCurrentGame(click);
 }
 
 function onClickStart() {
@@ -48,6 +50,7 @@ function addNewGameToDataBase() {
   db.collection("users")
     .add({
       userName: "Guest",
+      starttime: firebase.firestore.FieldValue.serverTimestamp(),
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
       length: 0,
       clicks: [],
@@ -61,4 +64,18 @@ function addNewGameToDataBase() {
     });
 }
 
-function addClickToCurrentGame(click) {}
+function addClickToCurrentGame(click) {
+  const currentGame = db.collection("users").doc(userID);
+  currentGame
+    .update({
+      length: firebase.firestore.FieldValue.increment(1),
+      clicks: firebase.firestore.FieldValue.arrayUnion(click),
+      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+    })
+    .then((docRef) => {
+      console.log("Document has been updated with ID: ", userID);
+    })
+    .catch((error) => {
+      console.error("Error updating document: ", error);
+    });
+}
