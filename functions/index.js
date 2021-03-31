@@ -6,7 +6,7 @@ admin.initializeApp();
 
 // Listen for updates to any `user` document.
 exports.evaluateHit = functions.firestore
-  .document("users/{userId}")
+  .document("games/{gameId}")
   .onUpdate((change, context) => {
     // Retrieve the current and previous value
     const data = change.after.data();
@@ -54,5 +54,6 @@ exports.evaluateHit = functions.firestore
     // Then return a promise of a set operation to update the hit
     return change.after.ref.update({
       clicks: newClicks,
+      isHitChecked: true,
     });
   });
