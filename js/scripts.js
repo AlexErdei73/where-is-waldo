@@ -70,7 +70,7 @@ function onClickStart() {
 function addNewGameToDataBase() {
   db.collection("games")
     .add({
-      userName: "Guest",
+      position: position,
       starttime: firebase.firestore.FieldValue.serverTimestamp(),
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
       length: 0,

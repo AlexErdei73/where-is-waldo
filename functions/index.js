@@ -21,26 +21,7 @@ exports.evaluateHit = functions.firestore
     const length = data.length;
     const click = newClicks[length - 1];
     const target = click.target;
-    const position = {
-      waldo: {
-        xmin: 529,
-        xmax: 559,
-        ymin: 355,
-        ymax: 415,
-      },
-      odlaw: {
-        xmin: 235,
-        xmax: 265,
-        ymin: 364,
-        ymax: 424,
-      },
-      wizzard: {
-        xmin: 629,
-        xmax: 659,
-        ymin: 360,
-        ymax: 420,
-      },
-    };
+    const position = data.position;
 
     const isTargetHit =
       position[target]["xmin"] <= click.x &&
