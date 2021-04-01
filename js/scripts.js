@@ -13,27 +13,6 @@ const click = {
 let gameID;
 const storageRef = storage.ref();
 
-const position = {
-  waldo: {
-    xmin: 529,
-    xmax: 559,
-    ymin: 355,
-    ymax: 415,
-  },
-  odlaw: {
-    xmin: 235,
-    xmax: 265,
-    ymin: 364,
-    ymax: 424,
-  },
-  wizzard: {
-    xmin: 629,
-    xmax: 659,
-    ymin: 360,
-    ymax: 420,
-  },
-};
-
 image.addEventListener("click", onClickImg);
 menuButtons.forEach((button) => {
   button.addEventListener("click", onClickBtn);
@@ -75,26 +54,21 @@ function addNewGameToDataBase() {
   db.collection("games")
     .add({
       clicks: [],
+      pictureIndex: 0,
     })
     .then((docRef) => {
       console.log("Document written with ID: ", docRef.id);
       gameID = docRef.id;
+        
       db.collection("secretGameData").doc(gameID)
-      .set({
-        hit: false,
-        startTimestamp: firebase.firestore.FieldValue.serverTimestamp(),
-        position: position,
-      })
-      .then(() => {
-        db.collection("secretGameData").doc(gameID)
-        .onSnapshot((doc) => {
-          const data = doc.data();
-          const target = data.target;
-          if (!target) return
-          if (data.hit) console.log(`${data.target} was hit`)
-            else console.log(`${data.target} was missed`);
-        });
-      })
+      .onSnapshot((doc) => {
+        const data = doc.data();
+        if (!data) return
+        const target = data.target;
+        if (!target) return
+        if (data.hit) console.log(`${target} was hit`)
+          else console.log(`${target} was missed`);
+      });
     })
     .catch((error) => {
       console.error("Error adding document: ", error);

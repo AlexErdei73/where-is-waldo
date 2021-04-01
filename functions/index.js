@@ -7,8 +7,27 @@ const { firebaseConfig } = require("firebase-functions");
 admin.initializeApp();
 
 const db = admin.firestore();
+// Listen for the creation of any `games` document.
+exports.initGame = functions.firestore
+  .document("games/{gameID}")
+  .onCreate((change, context) => {
+    const pictureIndex = change.data().pictureIndex;
 
-// Listen for updates to any `user` document.
+    const gameID = context.params.gameID;
+    return db.collection("secretGameData").doc("pictureInfo").get()
+    .then((doc) => {
+      const position = doc.data().positions[pictureIndex];
+      return db.collection("secretGameData").doc(gameID)
+      .set({
+        hit: false,
+        startTimestamp: admin.firestore.FieldValue.serverTimestamp(),
+        position: position,
+      })
+    });
+  });
+
+
+// Listen for updates to any `games` document.
 exports.evaluateHit = functions.firestore
   .document("games/{gameID}")
   .onUpdate((change, context) => {
