@@ -9,7 +9,6 @@ const click = {
   x: 0,
   y: 0,
   target: "",
-  hit: false,
 };
 let gameID;
 const storageRef = storage.ref();
@@ -75,24 +74,27 @@ function onClickStart() {
 function addNewGameToDataBase() {
   db.collection("games")
     .add({
-      position: position,
-      starttime: firebase.firestore.FieldValue.serverTimestamp(),
-      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-      length: 0,
-      isHitChecked: false,
       clicks: [],
     })
     .then((docRef) => {
       console.log("Document written with ID: ", docRef.id);
       gameID = docRef.id;
-      db.collection('games').doc(gameID)
+      db.collection("secretGameData").doc(gameID)
+      .set({
+        hit: false,
+        startTimestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        position: position,
+      })
+      .then(() => {
+        db.collection("secretGameData").doc(gameID)
         .onSnapshot((doc) => {
-          console.log(doc.data());
-          if (!doc.data().isHitChecked) return
-          const click = doc.data().clicks[doc.data().length - 1];
-          if (click.hit) console.log(`${click.target} was hit`)
-            else console.log(`${click.target} was missed`);
+          const data = doc.data();
+          const target = data.target;
+          if (!target) return
+          if (data.hit) console.log(`${data.target} was hit`)
+            else console.log(`${data.target} was missed`);
         });
+      })
     })
     .catch((error) => {
       console.error("Error adding document: ", error);
@@ -103,10 +105,7 @@ function addClickToCurrentGame(click) {
   const currentGame = db.collection("games").doc(gameID);
   currentGame
     .update({
-      length: firebase.firestore.FieldValue.increment(1),
-      isHitChecked: false,
       clicks: firebase.firestore.FieldValue.arrayUnion(click),
-      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
     })
     .then(() => {
       console.log("Document has been updated with ID: ", gameID);
