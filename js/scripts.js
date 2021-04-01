@@ -12,6 +12,7 @@ const click = {
   hit: false,
 };
 let gameID;
+const storageRef = storage.ref();
 
 const position = {
   waldo: {
@@ -63,8 +64,12 @@ function onClickBtn(event) {
 }
 
 function onClickStart() {
-  image.classList.add("show");
-  addNewGameToDataBase();
+  storageRef.child('pictures/waldo-1.jpg').getDownloadURL()
+    .then((url) => {
+      image.src = url;
+      image.classList.add("show");
+      addNewGameToDataBase();
+    }); 
 }
 
 function addNewGameToDataBase() {
