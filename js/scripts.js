@@ -66,7 +66,7 @@ function addNewGameToDataBase() {
         if (!data) return
         const target = data.target;
         if (!target) return
-        if (data.hit) console.log(`${target} was hit`)
+        if (data.hit) createTag(target)
           else console.log(`${target} was missed`);
       });
     })
@@ -87,4 +87,33 @@ function addClickToCurrentGame(click) {
     .catch((error) => {
       console.error("Error updating document: ", error);
     });
+}
+
+function createTag(target) {
+  const container = document.querySelector(".picture-container");
+  const tags = Array.from(document.querySelectorAll(".tag"));
+  const targets = tags.map(tag => tag.getAttribute("target"));
+  if (targets.indexOf(target) !== -1) return
+  const targetDiv = document.createElement("div");
+  targetDiv.setAttribute("target", target);
+  targetDiv.textContent = target;
+  targetDiv.classList.add("tag");
+  getTagPosition(0, target)
+    .then((pos) => {
+      targetDiv.style.top = `${pos.y}px`;
+      targetDiv.style.left = `${pos.x}px`;
+      container.appendChild(targetDiv);
+    });
+}
+
+function getTagPosition(pictureIndex, target) {
+  return db.collection("secretGameData").doc("pictureInfo").get()
+    .then((doc) => {
+      const positions = doc.data().positions;
+      const position = positions[pictureIndex][target];
+      const x = Math.round((position.xmin + position.xmax) / 2);
+      const y = Math.round((position.ymin + position.ymax) / 2);
+      console.log({ x, y });
+      return { x: x, y: y };
+    })
 }

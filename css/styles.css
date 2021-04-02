@@ -63,3 +63,11 @@ img {
 #start:hover {
   background: darkred;
 }
+
+.tag {
+  position: absolute;
+  font-size: 10px;
+  padding: 4px;
+  background: black;
+  color: lightgray;
+}

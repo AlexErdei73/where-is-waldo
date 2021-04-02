@@ -22,6 +22,7 @@ exports.initGame = functions.firestore
         hit: false,
         startTimestamp: admin.firestore.FieldValue.serverTimestamp(),
         position: position,
+        targetsHit: [],
       })
     });
   });
@@ -52,11 +53,15 @@ exports.evaluateHit = functions.firestore
           position[target]["ymin"] <= click.y &&
           position[target]["ymax"] >= click.y;
 
+        const targetsHit = doc.data().targetsHit;
+        if (isTargetHit && targetsHit.indexOf(target)===-1) targetsHit.push(target); 
+
           return db.collection("secretGameData").doc(gameID)
                   .update({
                     hit: isTargetHit,
                     target: target,
                     timestamp: admin.firestore.FieldValue.serverTimestamp(),
+                    targetsHit: targetsHit,
                   })
       })
       .catch((error) => {
