@@ -15,10 +15,19 @@ const storageRef = storage.ref();
 const pictureIndex = 1;
 
 image.addEventListener("click", onClickImg);
-menuButtons.forEach((button) => {
-  button.addEventListener("click", onClickBtn);
-});
 startButton.addEventListener("click", onClickStart);
+db.collection("secretGameData").doc("pictureInfo").get()
+  .then((doc) => {
+    const numberOfCharacters = doc.data().numbersOfCharacters[pictureIndex];
+    menuButtons.forEach((button, index) => {
+      button.addEventListener("click", onClickBtn);
+      if (index >= numberOfCharacters) { 
+        button.setAttribute("disabled", true); 
+        button.style.opacity = 0;
+        if (numberOfCharacters === 4) button.style.heigth = '16px';
+      }
+    });
+  });
 
 function onClickImg(event) {
   if (hasImageClicked) return;
