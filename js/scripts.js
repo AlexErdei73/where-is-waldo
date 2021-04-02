@@ -12,6 +12,7 @@ const click = {
 };
 let gameID;
 const storageRef = storage.ref();
+const pictureIndex = 1;
 
 image.addEventListener("click", onClickImg);
 menuButtons.forEach((button) => {
@@ -42,7 +43,11 @@ function onClickBtn(event) {
 }
 
 function onClickStart() {
-  storageRef.child('pictures/waldo-1.jpg').getDownloadURL()
+  const waldoPictures = [
+    'pictures/waldo-1.jpg',
+    'pictures/waldo-2.jpg',
+  ]
+  storageRef.child(waldoPictures[pictureIndex]).getDownloadURL()
     .then((url) => {
       image.src = url;
       image.classList.add("show");
@@ -54,7 +59,7 @@ function addNewGameToDataBase() {
   db.collection("games")
     .add({
       clicks: [],
-      pictureIndex: 0,
+      pictureIndex: pictureIndex,
     })
     .then((docRef) => {
       console.log("Document written with ID: ", docRef.id);
@@ -98,7 +103,7 @@ function createTag(target) {
   targetDiv.setAttribute("target", target);
   targetDiv.textContent = target;
   targetDiv.classList.add("tag");
-  getTagPosition(0, target)
+  getTagPosition(pictureIndex, target)
     .then((pos) => {
       targetDiv.style.top = `${pos.y}px`;
       targetDiv.style.left = `${pos.x}px`;
@@ -113,7 +118,6 @@ function getTagPosition(pictureIndex, target) {
       const position = positions[pictureIndex][target];
       const x = Math.round((position.xmin + position.xmax) / 2);
       const y = Math.round((position.ymin + position.ymax) / 2);
-      console.log({ x, y });
-      return { x: x, y: y };
-    })
+      return { x, y };
+    });
 }
