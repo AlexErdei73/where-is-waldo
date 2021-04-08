@@ -16,7 +16,7 @@ const pictureIndex = 1;
 
 image.addEventListener("click", onClickImg);
 startButton.addEventListener("click", onClickStart);
-db.collection("secretGameData").doc("pictureInfo").get()
+db.collection("secureGameData").doc("pictureInfo").get()
   .then((doc) => {
     const numberOfCharacters = doc.data().numbersOfCharacters[pictureIndex];
     menuButtons.forEach((button, index) => {
@@ -74,7 +74,7 @@ function addNewGameToDataBase() {
       console.log("Document written with ID: ", docRef.id);
       gameID = docRef.id;
         
-      db.collection("secretGameData").doc(gameID)
+      db.collection("secureGameData").doc(gameID)
       .onSnapshot((doc) => {
         const data = doc.data();
         if (!data) return
@@ -124,7 +124,7 @@ function createTag(target) {
 }
 
 function getTagPosition(pictureIndex, target) {
-  return db.collection("secretGameData").doc("pictureInfo").get()
+  return db.collection("secureGameData").doc("pictureInfo").get()
     .then((doc) => {
       const positions = doc.data().positions;
       const position = positions[pictureIndex][target];

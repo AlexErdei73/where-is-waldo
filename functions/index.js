@@ -14,11 +14,11 @@ exports.initGame = functions.firestore
     const pictureIndex = change.data().pictureIndex;
 
     const gameID = context.params.gameID;
-    return db.collection("secretGameData").doc("pictureInfo").get()
+    return db.collection("secureGameData").doc("pictureInfo").get()
     .then((doc) => {
       const position = doc.data().positions[pictureIndex];
       const numberOfCharacters = doc.data().numbersOfCharacters[pictureIndex];
-      return db.collection("secretGameData").doc(gameID)
+      return db.collection("secureGameData").doc(gameID)
       .set({
         hit: false,
         startTimestamp: admin.firestore.FieldValue.serverTimestamp(),
@@ -45,7 +45,7 @@ exports.evaluateHit = functions.firestore
     const gameID = context.params.gameID;
 
     //return a promise
-    return db.collection("secretGameData").doc(gameID).get()
+    return db.collection("secureGameData").doc(gameID).get()
       .then((doc) => {
         const position = doc.data().position;
 
@@ -61,7 +61,7 @@ exports.evaluateHit = functions.firestore
         const isGameOver = isTargetHit && doc.data().numberOfCharacters===targetsHit.length;
         const timestamp = admin.firestore.FieldValue.serverTimestamp();
         
-          return db.collection("secretGameData").doc(gameID)
+          return db.collection("secureGameData").doc(gameID)
                   .update({
                     hit: isTargetHit,
                     target: target,
