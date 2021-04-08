@@ -5,6 +5,7 @@ const startButton = document.querySelector("#start");
 const borderWidth = 30;
 const borderHeight = 60;
 let hasImageClicked = false;
+let gameOver = false;
 const click = {
   x: 0,
   y: 0,
@@ -30,7 +31,7 @@ db.collection("secureGameData").doc("pictureInfo").get()
   });
 
 function onClickImg(event) {
-  if (hasImageClicked) return;
+  if (hasImageClicked || gameOver) return;
   const x = event.layerX;
   const y = event.layerY;
   console.log({ x, y });
@@ -141,4 +142,5 @@ function checkGameOver(data) {
   const startTimestamp = data.startTimestamp;
   const time = (timestamp.toMillis() - startTimestamp.toMillis()) / 1000;
   console.log(`GAME OVER, time = ${time}s`);
+  gameOver = true;
 }
