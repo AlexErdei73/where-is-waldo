@@ -17,12 +17,14 @@ exports.initGame = functions.firestore
     return db.collection("secretGameData").doc("pictureInfo").get()
     .then((doc) => {
       const position = doc.data().positions[pictureIndex];
+      const numberOfCharacters = doc.data().numbersOfCharacters[pictureIndex];
       return db.collection("secretGameData").doc(gameID)
       .set({
         hit: false,
         startTimestamp: admin.firestore.FieldValue.serverTimestamp(),
         position: position,
         targetsHit: [],
+        numberOfCharacters: numberOfCharacters,
       })
     });
   });
@@ -54,14 +56,18 @@ exports.evaluateHit = functions.firestore
           position[target]["ymax"] >= click.y;
 
         const targetsHit = doc.data().targetsHit;
-        if (isTargetHit && targetsHit.indexOf(target)===-1) targetsHit.push(target); 
-
+        if (isTargetHit && targetsHit.indexOf(target)===-1) targetsHit.push(target);
+        
+        const isGameOver = isTargetHit && doc.data().numberOfCharacters===targetsHit.length;
+        const timestamp = admin.firestore.FieldValue.serverTimestamp();
+        
           return db.collection("secretGameData").doc(gameID)
                   .update({
                     hit: isTargetHit,
                     target: target,
-                    timestamp: admin.firestore.FieldValue.serverTimestamp(),
+                    timestamp: timestamp,
                     targetsHit: targetsHit,
+                    isGameOver: isGameOver,
                   })
       })
       .catch((error) => {

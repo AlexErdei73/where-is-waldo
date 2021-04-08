@@ -80,7 +80,10 @@ function addNewGameToDataBase() {
         if (!data) return
         const target = data.target;
         if (!target) return
-        if (data.hit) createTag(target)
+        if (data.hit) { 
+          createTag(target);
+          checkGameOver(data);
+        }
           else console.log(`${target} was missed`);
       });
     })
@@ -129,4 +132,13 @@ function getTagPosition(pictureIndex, target) {
       const y = Math.round((position.ymin + position.ymax) / 2);
       return { x, y };
     });
+}
+
+function checkGameOver(data) {
+  const isGameOver = data.isGameOver;
+  if (!isGameOver) return
+  const timestamp = data.timestamp;
+  const startTimestamp = data.startTimestamp;
+  const time = (timestamp.toMillis() - startTimestamp.toMillis()) / 1000;
+  console.log(`GAME OVER, time = ${time}s`);
 }
