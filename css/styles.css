@@ -1,8 +1,6 @@
 .picture-container {
-  position: static;
   width: 1024px;
-  height: 768px;
-  float: left;
+  margin: auto;
 }
 
 img {
@@ -51,8 +49,8 @@ img {
 }
 
 #start {
-  float: right;
-  margin: 50px;
+  display: block;
+  margin: auto;
   width: 100px;
   height: 30px;
   font-size: large;

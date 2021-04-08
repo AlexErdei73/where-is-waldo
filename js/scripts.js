@@ -1,3 +1,4 @@
+const container = document.querySelector(".picture-container");
 const image = document.querySelector("img");
 const popupMenu = document.querySelector(".popup-menu");
 const menuButtons = document.querySelectorAll(".choice");
@@ -14,6 +15,11 @@ const click = {
 let gameID;
 const storageRef = storage.ref();
 const pictureIndex = 1;
+const shift = (() => {
+  const marginLeft = getComputedStyle(container)["margin-left"];
+  const indexOfPx = marginLeft.indexOf('px');
+  return Number(marginLeft.slice(0, indexOfPx));
+})();
 
 image.addEventListener("click", onClickImg);
 startButton.addEventListener("click", onClickStart);
@@ -39,7 +45,7 @@ function onClickImg(event) {
   click.y = y;
   popupMenu.classList.add("show");
   popupMenu.style.top = `${y - borderHeight / 2}px`;
-  popupMenu.style.left = `${x - borderWidth / 2}px`;
+  popupMenu.style.left = `${x + shift - borderWidth / 2}px`;
   hasImageClicked = true;
 }
 
@@ -83,7 +89,7 @@ function addNewGameToDataBase() {
         if (!target) return
         if (data.hit) { 
           createTag(target);
-          checkGameOver(data);
+          handleGameOver(data);
         }
           else console.log(`${target} was missed`);
       });
@@ -119,7 +125,7 @@ function createTag(target) {
   getTagPosition(pictureIndex, target)
     .then((pos) => {
       targetDiv.style.top = `${pos.y}px`;
-      targetDiv.style.left = `${pos.x}px`;
+      targetDiv.style.left = `${pos.x + shift}px`;
       container.appendChild(targetDiv);
     });
 }
@@ -135,12 +141,11 @@ function getTagPosition(pictureIndex, target) {
     });
 }
 
-function checkGameOver(data) {
+function handleGameOver(data) {
   const isGameOver = data.isGameOver;
   if (!isGameOver) return
-  const timestamp = data.timestamp;
-  const startTimestamp = data.startTimestamp;
-  const time = (timestamp.toMillis() - startTimestamp.toMillis()) / 1000;
+  const time = data.time;
+  if (!time) return
   console.log(`GAME OVER, time = ${time}s`);
   gameOver = true;
 }
