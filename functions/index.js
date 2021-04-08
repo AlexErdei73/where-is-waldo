@@ -75,3 +75,25 @@ exports.evaluateHit = functions.firestore
         return null;
       })
   });
+
+  exports.calcTime = functions.firestore
+    .document("secureGameData/{gameID}")
+    .onUpdate((change, context) => {
+      const data = change.after.data();
+      let time = data.time;
+      const isGameOver = data.isGameOver;
+      if (time || !isGameOver) return null;
+      const gameID = context.params.gameID;
+      const startTimestamp = data.startTimestamp;
+      const timestamp = data.timestamp;
+      if (!timestamp) return null;
+      time = (timestamp.toMillis() - startTimestamp.toMillis()) / 1000;
+      return db.collection("secureGameData").doc(gameID)
+        .update({
+          time: time,
+        })
+        .catch((error) => {
+          console.log("error: ", error);
+          return null;
+        })
+    });
