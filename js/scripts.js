@@ -20,6 +20,11 @@ const shift = (() => {
   const indexOfPx = marginLeft.indexOf('px');
   return Number(marginLeft.slice(0, indexOfPx));
 })();
+const introduction = `Your task is to click on the picture to find Waldo, Odlaw and the
+Wizzard. If you ready to start press the button!`
+const pElement = document.createElement('p');
+pElement.textContent = introduction;
+container.appendChild(pElement);
 
 image.addEventListener("click", onClickImg);
 startButton.addEventListener("click", onClickStart);
@@ -63,6 +68,8 @@ function onClickStart() {
     'pictures/waldo-1.jpg',
     'pictures/waldo-2.jpg',
   ]
+  startButton.style.visibility = 'hidden';
+  pElement.remove();
   storageRef.child(waldoPictures[pictureIndex]).getDownloadURL()
     .then((url) => {
       image.src = url;
