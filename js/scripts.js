@@ -14,7 +14,7 @@ const click = {
 };
 let gameID;
 const storageRef = storage.ref();
-const pictureIndex = 0;
+let pictureIndex = 0;
 const shiftRight = (() => {
   const marginLeft = getComputedStyle(container)["margin-left"];
   const indexOfPx = marginLeft.indexOf('px');
@@ -23,21 +23,12 @@ const shiftRight = (() => {
 const shiftDown = 60;
 container.style.marginTop = `${shiftDown}px`;
 createIntroPage();
+const nextButton = document.querySelector('#next');
 
 image.addEventListener("click", onClickImg);
 startButton.addEventListener("click", onClickStart);
-db.collection("secureGameData").doc("pictureInfo").get()
-  .then((doc) => {
-    const numberOfCharacters = doc.data().numbersOfCharacters[pictureIndex];
-    menuButtons.forEach((button, index) => {
-      button.addEventListener("click", onClickBtn);
-      if (index >= numberOfCharacters) { 
-        button.setAttribute("disabled", true); 
-        button.style.opacity = 0;
-        if (numberOfCharacters === 4) button.style.heigth = '16px';
-      }
-    });
-  });
+nextButton.addEventListener("click", onClickNext);
+setupMenuButtons();
 
 function onClickImg(event) {
   if (hasImageClicked || gameOver) return;
@@ -61,19 +52,36 @@ function onClickBtn(event) {
   addClickToCurrentGame(click);
 }
 
-function onClickStart() {
+function loadPicture() {
   const waldoPictures = [
     'pictures/waldo-1.jpg',
     'pictures/waldo-2.jpg',
   ]
-  startButton.style.visibility = 'hidden';
-  destroyIntroPage();
   storageRef.child(waldoPictures[pictureIndex]).getDownloadURL()
     .then((url) => {
       image.src = url;
       image.classList.add("show");
       addNewGameToDataBase();
-    }); 
+    });
+}
+
+function onClickStart() {
+  startButton.style.visibility = 'hidden';
+  destroyIntroPage();
+  loadPicture(); 
+}
+
+function onClickNext() {
+  hideModal();
+  image.classList.remove("show");
+  pictureIndex += 1;
+  gameOver = false;
+  hasImageClicked = false;
+  if (pictureIndex === 2) pictureIndex = 0;
+  loadPicture();
+  destroyTags();
+  resetMenuButtons();
+  setupMenuButtons();
 }
 
 function addNewGameToDataBase() {
@@ -151,7 +159,8 @@ function handleGameOver(data) {
   if (!isGameOver) return
   const time = data.time;
   if (!time) return
-  console.log(`GAME OVER, time = ${time}s`);
+  const text = `You have found everybody in ${time}s`;
+  setModalBodyText(text);
   showModal();
   gameOver = true;
 }
@@ -231,4 +240,39 @@ function hideModal() {
   modal.style.visibility = 'hidden';
   const modalContent = document.querySelector('.modal-content');
   modalContent.classList.replace('show-modal','hide-modal');
+}
+
+function setModalBodyText(text) {
+  const modalBody = document.querySelector('.modal-body');
+  const pElement = modalBody.querySelector('p');
+  pElement.textContent = text;
+}
+
+function destroyTags() {
+  const container = document.querySelector(".picture-container");
+  const tags = document.querySelectorAll(".tag");
+  tags.forEach(element => element.remove());
+}
+
+function resetMenuButtons() {
+  menuButtons.forEach(button => {
+    button.removeEventListener("click", onClickBtn);
+    button.removeAttribute('disabled');
+    button.style = '';
+  })
+}
+
+function setupMenuButtons() {
+  db.collection("secureGameData").doc("pictureInfo").get()
+  .then((doc) => {
+    const numberOfCharacters = doc.data().numbersOfCharacters[pictureIndex];
+    menuButtons.forEach((button, index) => {
+      button.addEventListener("click", onClickBtn);
+      if (index >= numberOfCharacters) { 
+        button.setAttribute("disabled", true); 
+        button.style.opacity = 0;
+        if (numberOfCharacters === 4) button.style.heigth = '16px';
+      }
+    });
+  });
 }

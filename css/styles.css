@@ -48,7 +48,7 @@ img {
   opacity: 1;
 }
 
-#start {
+.ctrlBtn {
   display: block;
   margin: auto;
   width: 100px;
@@ -58,7 +58,7 @@ img {
   color: white;
 }
 
-#start:hover {
+.ctrlBtn:hover {
   background: darkred;
 }
 
@@ -136,13 +136,14 @@ h1 {
 
 .modal-header {
   padding: 2px 16px;
-  background-color: #5cb85c;
+  background-color: dodgerblue;
   color: white;
 }
 
 .modal-footer {
   padding: 2px 16px;
-  background-color: #5cb85c;
+  height: 40px;
+  background-color: darkred;
   color: white;
 }
 
@@ -150,4 +151,14 @@ h1 {
   position: relative;
   background-color: #fefefe;
   padding: 2px 16px;
+}
+
+#scores {
+  float: left;
+  margin: 5px;
+}
+
+#next {
+  float: right;
+  margin: 5px;
 }
