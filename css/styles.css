@@ -69,3 +69,16 @@ img {
   background: black;
   color: lightgray;
 }
+
+h1 {
+  width: 20%;
+  margin:auto;
+}
+
+.red {
+  color: rgb(187, 24, 13);
+}
+
+.blue {
+  color: dodgerblue;
+}
