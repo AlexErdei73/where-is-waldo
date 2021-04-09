@@ -71,8 +71,8 @@ img {
 }
 
 h1 {
-  width: 20%;
-  margin:auto;
+  width: 30%;
+  margin: auto;
 }
 
 .red {
@@ -81,4 +81,20 @@ h1 {
 
 .blue {
   color: dodgerblue;
+}
+
+#title-pic {
+  width: 50px;
+  opacity: 1;
+}
+
+#title-bar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 60px;
+  background: white;
+  z-index: 2;
+  opacity: 1;
 }
