@@ -152,6 +152,7 @@ function handleGameOver(data) {
   const time = data.time;
   if (!time) return
   console.log(`GAME OVER, time = ${time}s`);
+  showModal();
   gameOver = true;
 }
 
@@ -216,4 +217,18 @@ function destroyIntroPage() {
   pElements.forEach(item => item.remove());
   const div = container.querySelector('#characters');
   div.remove();
+}
+
+function showModal() {
+  const modal = document.querySelector('.modal');
+  modal.style.visibility = 'visible';
+  const modalContent = document.querySelector('.modal-content');
+  modalContent.classList.replace('hide-modal','show-modal');
+}
+
+function hideModal() {
+  const modal = document.querySelector('.modal');
+  modal.style.visibility = 'hidden';
+  const modalContent = document.querySelector('.modal-content');
+  modalContent.classList.replace('show-modal','hide-modal');
 }
