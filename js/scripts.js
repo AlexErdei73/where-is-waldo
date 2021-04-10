@@ -16,13 +16,7 @@ let gameID;
 const storageRef = storage.ref();
 let pictureIndex = 0;
 const numberOfPictures = 2;
-const shiftRight = (() => {
-  const marginLeft = getComputedStyle(container)["margin-left"];
-  const indexOfPx = marginLeft.indexOf('px');
-  return Number(marginLeft.slice(0, indexOfPx));
-})();
-const shiftDown = 60;
-container.style.marginTop = `${shiftDown}px`;
+container.style.marginTop = `60px`;
 createIntroPage();
 const nextButton = document.querySelector('#next');
 let showScores = false;
@@ -51,8 +45,8 @@ function onClickImg(event) {
   click.x = x;
   click.y = y;
   popupMenu.classList.add("show");
-  popupMenu.style.top = `${y + shiftDown - borderHeight / 2}px`;
-  popupMenu.style.left = `${x + shiftRight - borderWidth / 2}px`;
+  popupMenu.style.top = `${y - borderHeight / 2}px`;
+  popupMenu.style.left = `${x - borderWidth / 2}px`;
   hasImageClicked = true;
 }
 
@@ -168,8 +162,8 @@ function createTag(target) {
   targetDiv.classList.add("tag");
   getTagPosition(pictureIndex, target)
     .then((pos) => {
-      targetDiv.style.top = `${pos.y + shiftDown}px`;
-      targetDiv.style.left = `${pos.x + shiftRight}px`;
+      targetDiv.style.top = `${pos.y}px`;
+      targetDiv.style.left = `${pos.x}px`;
       container.appendChild(targetDiv);
     });
 }
