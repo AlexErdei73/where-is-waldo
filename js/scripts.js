@@ -73,6 +73,8 @@ function onClickStart() {
 
 function onClickNext() {
   hideModal();
+  const username = getUserName();
+  addNameToCurrentGame(username);
   image.classList.remove("show");
   pictureIndex += 1;
   gameOver = false;
@@ -120,6 +122,20 @@ function addClickToCurrentGame(click) {
     })
     .then(() => {
       console.log("Document has been updated with ID: ", gameID);
+    })
+    .catch((error) => {
+      console.error("Error updating document: ", error);
+    });
+}
+
+function addNameToCurrentGame(name) {
+  const currentGame = db.collection("games").doc(gameID);
+  currentGame
+    .update({
+      username: name,
+    })
+    .then(() => {
+      console.log(`Username: ${name} has been added to Document with ID: `, gameID);
     })
     .catch((error) => {
       console.error("Error updating document: ", error);
@@ -187,7 +203,7 @@ function createIntroPage() {
   ]
   let imgElement;
   const div = document.createElement('div');
-  div.style.width = '600px';
+  div.style.width = '400px';
   div.style.margin = 'auto';
   div.id = 'characters';
   container.appendChild(div);
@@ -275,4 +291,9 @@ function setupMenuButtons() {
       }
     });
   });
+}
+
+function getUserName() {
+  const input = document.querySelector('#name');
+  return input.value;
 }
