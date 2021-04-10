@@ -177,6 +177,7 @@ function handleGameOver(data) {
   if (!time) return
   const text = `You have found everybody in ${time}s`;
   setModalBodyText(text);
+  setUpReadonlyOfInput();
   showModal();
   gameOver = true;
 }
@@ -250,6 +251,12 @@ function showModal() {
   const modalContent = document.querySelector('.modal-content');
   modalContent.classList.replace('hide-modal','show-modal');
 }
+
+function setUpReadonlyOfInput() {
+  const input = document.querySelector('#name');
+  if (pictureIndex === 0) input.removeAttribute('readonly') 
+    else input.setAttribute('readonly', true);
+} 
 
 function hideModal() {
   const modal = document.querySelector('.modal');
