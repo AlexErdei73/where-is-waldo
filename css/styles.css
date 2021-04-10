@@ -162,3 +162,22 @@ h1 {
   float: right;
   margin: 5px;
 }
+
+/* HTML table for scores*/
+table {
+  border-collapse: collapse;
+  width: 100%;
+  background-color: dodgerblue;
+  color: white;
+  margin-left: 2%;
+  margin-top: 3rem;
+}
+td,
+th {
+  border: 1px solid red;
+  text-align: left;
+  padding: 8px;
+}
+tr:nth-child(even) {
+  background-color: darkred;
+}
