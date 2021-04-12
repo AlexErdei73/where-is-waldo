@@ -1,3 +1,5 @@
+import { addNewGameToDataBase, addClickToCurrentGame, addNameToCurrentGame } from './database';
+
 const container = document.querySelector(".picture-container");
 const image = document.querySelector("#game-hero");
 const popupMenu = document.querySelector(".popup-menu");
@@ -12,9 +14,8 @@ const click = {
   y: 0,
   target: "",
 };
-let gameID;
 const storageRef = storage.ref();
-let pictureIndex = 0;
+export let pictureIndex = 0;
 const numberOfPictures = 2;
 container.style.marginTop = `60px`;
 createIntroPage();
@@ -95,63 +96,7 @@ function onClickNext() {
    }
 }
 
-function addNewGameToDataBase() {
-  db.collection("games")
-    .add({
-      clicks: [],
-      pictureIndex: pictureIndex,
-    })
-    .then((docRef) => {
-      console.log("Document written with ID: ", docRef.id);
-      gameID = docRef.id;
-        
-      db.collection("secureGameData").doc(gameID)
-      .onSnapshot((doc) => {
-        const data = doc.data();
-        if (!data) return
-        const target = data.target;
-        if (!target) return
-        if (data.hit) { 
-          createTag(target);
-          handleGameOver(data);
-        }
-          else console.log(`${target} was missed`);
-      });
-    })
-    .catch((error) => {
-      console.error("Error adding document: ", error);
-    });
-}
-
-function addClickToCurrentGame(click) {
-  const currentGame = db.collection("games").doc(gameID);
-  currentGame
-    .update({
-      clicks: firebase.firestore.FieldValue.arrayUnion(click),
-    })
-    .then(() => {
-      console.log("Document has been updated with ID: ", gameID);
-    })
-    .catch((error) => {
-      console.error("Error updating document: ", error);
-    });
-}
-
-function addNameToCurrentGame(name) {
-  const currentGame = db.collection("games").doc(gameID);
-  currentGame
-    .update({
-      username: name,
-    })
-    .then(() => {
-      console.log(`Username: ${name} has been added to Document with ID: `, gameID);
-    })
-    .catch((error) => {
-      console.error("Error updating document: ", error);
-    });
-}
-
-function createTag(target) {
+export function createTag(target) {
   const container = document.querySelector(".picture-container");
   const tags = Array.from(document.querySelectorAll(".tag"));
   const targets = tags.map(tag => tag.getAttribute("target"));
@@ -179,7 +124,7 @@ function getTagPosition(pictureIndex, target) {
     });
 }
 
-function handleGameOver(data) {
+export function handleGameOver(data) {
   const isGameOver = data.isGameOver;
   if (!isGameOver) return
   const time = data.time;
@@ -225,10 +170,10 @@ function createIntroPage() {
     imgElement.style.margin = '20px';
     div.appendChild(imgElement);
   }
-  emptyDiv = document.createElement('div');
+  const emptyDiv = document.createElement('div');
   div.appendChild(emptyDiv);
   for (let i = 0; i < 4; i++) {
-    nameElement = document.createElement('div');
+    const nameElement = document.createElement('div');
     nameElement.textContent = names[i];
     nameElement.style.width = '50px';
     nameElement.style.display = 'inline';
