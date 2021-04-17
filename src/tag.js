@@ -20,11 +20,11 @@ export function createTag(pictureIndex, target) {
 function getTagPosition(pictureIndex, target) {
     return getPosition(pictureIndex, target) 
       .then((pos) => {
-        return clacTagPosition(pos);
+        return calcTagPosition(pos);
       });
   }
 
-function clacTagPosition(position) {
+function calcTagPosition(position) {
   const x = Math.round((position.xmin + position.xmax) / 2);
   const y = Math.round((position.ymin + position.ymax) / 2);
   return { x, y };
@@ -33,4 +33,18 @@ function clacTagPosition(position) {
 export function destroyTags() {
     const tags = document.querySelectorAll(".tag");
     tags.forEach(element => element.remove());
+}
+
+export function addWarning(pos) {
+  const container = document.querySelector(".picture-container");
+  const targetDiv = document.createElement("div");
+  targetDiv.textContent = 'You missed it!';
+  targetDiv.classList.add("tag");
+  targetDiv.style.top = `${pos.y}px`;
+  targetDiv.style.left = `${pos.x}px`;
+  targetDiv.style.background = 'red';
+  container.appendChild(targetDiv);
+  setTimeout(() => {
+    targetDiv.remove();
+  }, 1500);
 }

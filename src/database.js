@@ -1,6 +1,6 @@
 import { handleGameOver, pictureIndex,  image, numberOfPictures } from './index';
 import { createScoresPage } from './scores';
-import { createTag } from './tag';
+import { addWarning, createTag } from './tag';
 
 let gameID;
 const storageRef = storage.ref();
@@ -58,8 +58,13 @@ function addListenerForClicks() {
           if (data.hit) { 
             createTag(pictureIndex, target);
             handleGameOver(data);
-          }
-            else console.log(`${target} was missed`);
+          } else {
+              const click = data.click;
+              const x = click.x;
+              const y = click.y;
+              const clickPosition = { x, y };
+              addWarning(clickPosition);
+            }
         });
 }
   

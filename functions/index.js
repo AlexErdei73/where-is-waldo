@@ -69,6 +69,7 @@ exports.evaluateHit = functions.firestore
                   .update({
                     hit: isTargetHit,
                     target: target,
+                    click: click,
                     timestamp: timestamp,
                     targetsHit: targetsHit,
                     isGameOver: isGameOver,
