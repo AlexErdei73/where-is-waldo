@@ -118,25 +118,26 @@ exports.updateScore = functions.firestore
     const pictureIndex = data.pictureIndex;
     const gameID = context.params.gameID;
     const secureGameData = db.collection("secureGameData").doc(gameID);
+    let time, score, scoreData;
     return secureGameData.get()
-      .then((doc) => {
-        const time = doc.data().time;
-        const score = { username, time };
-        const scoreData = db.collection("secureGameData").doc("scores");
-        return scoreData.get()
-        .then((doc) => {
-          const scores = doc.data()[pictureIndex];
-          let pos = 0;
-          scores.forEach((score, index) => {
-            if (score.time < time) pos = index + 1;
-          });
-          scores.splice(pos, 0, score);
-          return scoreData.update({
-            [pictureIndex]: scores,
-          });
-        });
-      })
-      .catch(error => {
-        console.log('error: ', error);
-      })
+    .then((doc) => {
+      time = doc.data().time;
+      score = { username, time };
+      scoreData = db.collection("secureGameData").doc("scores");
+      return scoreData.get()
+    })
+    .then((doc) => {
+      const scores = doc.data()[pictureIndex];
+      let pos = 0;
+      scores.forEach((score, index) => {
+        if (score.time < time) pos = index + 1;
+      });
+      scores.splice(pos, 0, score);
+      return scoreData.update({
+        [pictureIndex]: scores,
+      });
+    })
+    .catch(error => {
+      console.log('error: ', error);
+    })
   })
