@@ -18,15 +18,17 @@ const click = {
   target: "",
 };
 export let pictureIndex = 0;
-export const numberOfPictures = 2;
+export const numberOfPictures = 3;
 container.style.marginTop = `60px`;
 createIntroPage();
 const nextButton = document.querySelector('#next');
+const scoresButton = document.querySelector('#scores');
 export let showScores = false;
 
 image.addEventListener("click", onClickImg);
 startButton.addEventListener("click", onClickStart);
 nextButton.addEventListener("click", onClickNext);
+scoresButton.addEventListener("click", onClickScores);
 setupMenuButtons();
 addListenerForScores();
 
@@ -60,13 +62,7 @@ function onClickStart() {
 }
 
 function onClickNext() {
-  hideModal();
-  const username = getUserName();
-  addNameToCurrentGame(username);
-  image.classList.remove("show");
-  gameOver = false;
-  hasImageClicked = false;
-  destroyTags();
+  quitModal();
   if (pictureIndex === numberOfPictures - 1) showScores = true
    else {
     pictureIndex++;
@@ -74,6 +70,22 @@ function onClickNext() {
     resetMenuButtons();
     setupMenuButtons();
    }
+}
+
+function onClickScores() {
+  console.log('Scores clicked!');
+  quitModal();
+  showScores = true;
+}
+
+function quitModal() {
+  hideModal();
+  const username = getUserName();
+  addNameToCurrentGame(username);
+  image.classList.remove("show");
+  gameOver = false;
+  hasImageClicked = false;
+  destroyTags();
 }
 
 export function handleGameOver(data) {

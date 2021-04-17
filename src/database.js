@@ -9,11 +9,15 @@ export function loadPicture() {
   const waldoPictures = [
     'pictures/waldo-1.jpg',
     'pictures/waldo-2.jpg',
+    'pictures/waldo-3.jpg',
   ]
   storageRef.child(waldoPictures[pictureIndex]).getDownloadURL()
     .then((url) => {
       image.src = url;
-      image.classList.add("show");
+      image.onload = () => {
+        image.classList.add("show");
+        image.removeAttribute("onload");
+      }
       addNewGameToDataBase();
     });
 }
