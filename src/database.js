@@ -1,8 +1,38 @@
-import { handleGameOver, createTag, pictureIndex } from './index';
+import { handleGameOver, pictureIndex,  image, numberOfPictures } from './index';
+import { createScoresPage } from './scores';
+import { createTag } from './tag';
 
 let gameID;
+const storageRef = storage.ref();
 
-export function addNewGameToDataBase() {
+export function loadPicture() {
+  const waldoPictures = [
+    'pictures/waldo-1.jpg',
+    'pictures/waldo-2.jpg',
+  ]
+  storageRef.child(waldoPictures[pictureIndex]).getDownloadURL()
+    .then((url) => {
+      image.src = url;
+      image.classList.add("show");
+      addNewGameToDataBase();
+    });
+}
+
+export function addListenerForScores() {
+  db.collection("secureGameData").doc("scores")
+      .onSnapshot((doc) => {
+        const data = doc.data();
+        const scores = [];
+        const lengths = [];
+        for (let i = 0; i < numberOfPictures; i++) {
+          lengths.push(data[i].length);
+          scores.push(data[i]);
+        }
+        createScoresPage(scores, lengths);
+      });
+}
+
+function addNewGameToDataBase() {
     db.collection("games")
       .add({
         clicks: [],
@@ -11,24 +41,27 @@ export function addNewGameToDataBase() {
       .then((docRef) => {
         console.log("Document written with ID: ", docRef.id);
         gameID = docRef.id;
-          
-        db.collection("secureGameData").doc(gameID)
+        addListenerForClicks();  
+      })
+      .catch((error) => {
+        console.error("Error adding document: ", error);
+      });
+  }
+
+function addListenerForClicks() {
+  db.collection("secureGameData").doc(gameID)
         .onSnapshot((doc) => {
           const data = doc.data();
           if (!data) return
           const target = data.target;
           if (!target) return
           if (data.hit) { 
-            createTag(target);
+            createTag(pictureIndex, target);
             handleGameOver(data);
           }
             else console.log(`${target} was missed`);
         });
-      })
-      .catch((error) => {
-        console.error("Error adding document: ", error);
-      });
-  }
+}
   
 export function addClickToCurrentGame(click) {
     const currentGame = db.collection("games").doc(gameID);
@@ -57,3 +90,20 @@ export function addNameToCurrentGame(name) {
         console.error("Error updating document: ", error);
       });
   }
+
+export function getNumberOfCharacters() {
+  return db.collection("secureGameData").doc("pictureInfo").get()
+    .then((doc) => {
+      const numberOfCharacters = doc.data().numbersOfCharacters[pictureIndex];
+      return numberOfCharacters;
+    });
+}
+
+export function getPosition(pictureIndex, target) {
+  return db.collection("secureGameData").doc("pictureInfo").get()
+    .then((doc) => {
+      const positions = doc.data().positions;
+      const position = positions[pictureIndex][target];
+      return position;
+    });
+}
