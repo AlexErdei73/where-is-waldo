@@ -19,8 +19,8 @@ export function setupMenuButtons() {
         if (index >= number) { 
           button.setAttribute("disabled", true); 
           button.style.opacity = 0;
-          if (number === 4) button.style.heigth = '16px';
         }
+        if (number === 4) button.style.height = '16px';
       });
     });
   }
