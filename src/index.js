@@ -6,6 +6,9 @@ import { destroyTags } from './tag';
 
 export const container = document.querySelector(".picture-container");
 export const image = document.querySelector("#game-hero");
+export let pictureIndex = 0;
+export const numberOfPictures = 3;
+export let showScores = false;
 const popupMenu = document.querySelector(".popup-menu");
 const startButton = document.querySelector("#start");
 const borderWidth = 30;
@@ -17,13 +20,10 @@ const click = {
   y: 0,
   target: "",
 };
-export let pictureIndex = 0;
-export const numberOfPictures = 3;
 container.style.marginTop = `60px`;
 createIntroPage();
 const nextButton = document.querySelector('#next');
 const scoresButton = document.querySelector('#scores');
-export let showScores = false;
 
 image.addEventListener("click", onClickImg);
 startButton.addEventListener("click", onClickStart);
@@ -37,7 +37,6 @@ function onClickImg(event) {
   if (hasImageClicked || gameOver) return;
   const x = event.layerX;
   const y = event.layerY;
-  console.log({ x, y });
   click.x = x;
   click.y = y;
   popupMenu.classList.add("show");
@@ -48,7 +47,6 @@ function onClickImg(event) {
 
 export function onClickBtn(event) {
   const target = event.target;
-  console.log(target.textContent);
   click.target = target.textContent;
   popupMenu.classList.remove("show");
   hasImageClicked = false;
@@ -73,7 +71,6 @@ function onClickNext() {
 }
 
 function onClickScores() {
-  console.log('Scores clicked!');
   quitModal();
   showScores = true;
 }

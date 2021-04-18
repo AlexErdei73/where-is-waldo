@@ -43,7 +43,6 @@ function addNewGameToDataBase() {
         pictureIndex: pictureIndex,
       })
       .then((docRef) => {
-        console.log("Document written with ID: ", docRef.id);
         gameID = docRef.id;
         addListenerForClicks();  
       })
@@ -78,9 +77,6 @@ export function addClickToCurrentGame(click) {
       .update({
         clicks: firebase.firestore.FieldValue.arrayUnion(click),
       })
-      .then(() => {
-        console.log("Document has been updated with ID: ", gameID);
-      })
       .catch((error) => {
         console.error("Error updating document: ", error);
       });
@@ -91,9 +87,6 @@ export function addNameToCurrentGame(name) {
     currentGame
       .update({
         username: name,
-      })
-      .then(() => {
-        console.log(`Username: ${name} has been added to Document with ID: `, gameID);
       })
       .catch((error) => {
         console.error("Error updating document: ", error);
