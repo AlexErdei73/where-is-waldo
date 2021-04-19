@@ -2,6 +2,7 @@ import { image, showScores, numberOfPictures, container } from './index';
 
 export function createScoresPage(scores, lengths) {
   if (!showScores) return
+  window.scrollTo(0,0);
   image.classList.remove('show');
   image.style.position = 'absolute';
   const table = document.createElement('table');
