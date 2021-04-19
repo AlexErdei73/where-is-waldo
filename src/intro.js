@@ -1,9 +1,11 @@
 import { container } from './index';
 
+let interval;
+let counter = 0;
+
 export function createIntroPage() {
     const introduction1 = `Let me itroduce you Waldo and his friends:`
     const pElement1 = document.createElement('p');
-    pElement1.textContent = introduction1;
     pElement1.style.fontSize = '21px';
     pElement1.style.width = '600px';
     pElement1.style.margin = '20px auto';
@@ -49,7 +51,19 @@ export function createIntroPage() {
     time, the faster you can find them, the better. Are you ready? 
     Press the button!`
     const pElement2 = document.createElement('p');
-    pElement2.textContent = introduction2;
+    interval = setInterval(() => {
+      if (counter <= introduction1.length) {
+        pElement1.textContent = introduction1.slice(0, counter);
+        counter++;
+      } else {
+        if (counter - introduction1.length > introduction2.length) {
+          clearInterval(interval);
+          return
+        }
+        counter++;
+        pElement2.textContent = introduction2.slice(0, counter - introduction1.length);
+      } 
+    }, 50);
     pElement2.style.fontSize = '21px';
     pElement2.style.width = '600px';
     pElement2.style.margin = '20px auto';
