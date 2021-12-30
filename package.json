@@ -1,0 +1,23 @@
+{
+  "name": "where-is-waldo",
+  "version": "1.0.0",
+  "description": "This app is the well known where is waldo game in my version. This is the next project in the JavaScript curriculum of the Odin Project. I use Firebase backend to build this. The original project description can be found on the following [website](https://www.theodinproject.com/paths/full-stack-javascript/courses/javascript/lessons/where-s-waldo-a-photo-tagging-app)",
+  "main": "index.js",
+  "devDependencies": {
+    "webpack": "^5.65.0",
+    "webpack-cli": "^4.9.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlexErdei73/where-is-waldo.git"
+  },
+  "author": "Alex Erdei",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AlexErdei73/where-is-waldo/issues"
+  },
+  "homepage": "https://github.com/AlexErdei73/where-is-waldo#readme"
+}

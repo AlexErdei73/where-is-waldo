@@ -1,8 +1,19 @@
-import { loadPicture, addClickToCurrentGame, addNameToCurrentGame, addListenerForScores } from './database';
-import { createIntroPage, destroyIntroPage } from './intro';
-import { showModal, setUpReadonlyOfInput, hideModal, setModalBodyText, getUserName } from './modal';
-import { setupMenuButtons, resetMenuButtons } from './menu';
-import { destroyTags } from './tag';
+import {
+  loadPicture,
+  addClickToCurrentGame,
+  addNameToCurrentGame,
+  addListenerForScores,
+} from "./database";
+import { createIntroPage, destroyIntroPage } from "./intro";
+import {
+  showModal,
+  setUpReadonlyOfInput,
+  hideModal,
+  setModalBodyText,
+  getUserName,
+} from "./modal";
+import { setupMenuButtons, resetMenuButtons } from "./menu";
+import { destroyTags } from "./tag";
 
 export const container = document.querySelector(".picture-container");
 export const image = document.querySelector("#game-hero");
@@ -22,8 +33,8 @@ const click = {
 };
 container.style.marginTop = `60px`;
 createIntroPage();
-const nextButton = document.querySelector('#next');
-const scoresButton = document.querySelector('#scores');
+const nextButton = document.querySelector("#next");
+const scoresButton = document.querySelector("#scores");
 
 image.addEventListener("click", onClickImg);
 startButton.addEventListener("click", onClickStart);
@@ -32,9 +43,8 @@ scoresButton.addEventListener("click", onClickScores);
 setupMenuButtons();
 addListenerForScores();
 
-
 function onClickImg(event) {
-  if (hasImageClicked || gameOver) return;
+  if (hasImageClicked || gameOver || showScores) return;
   const x = event.layerX;
   const y = event.layerY;
   click.x = x;
@@ -54,20 +64,20 @@ export function onClickBtn(event) {
 }
 
 function onClickStart() {
-  startButton.style.visibility = 'hidden';
+  startButton.style.visibility = "hidden";
   destroyIntroPage();
-  loadPicture(); 
+  loadPicture();
 }
 
 function onClickNext() {
   quitModal();
-  if (pictureIndex === numberOfPictures - 1) showScores = true
-   else {
+  if (pictureIndex === numberOfPictures - 1) showScores = true;
+  else {
     pictureIndex++;
     loadPicture();
     resetMenuButtons();
     setupMenuButtons();
-   }
+  }
 }
 
 function onClickScores() {
@@ -87,9 +97,9 @@ function quitModal() {
 
 export function handleGameOver(data) {
   const isGameOver = data.isGameOver;
-  if (!isGameOver) return
+  if (!isGameOver) return;
   const time = data.time;
-  if (!time) return
+  if (!time) return;
   const text = `You have found everybody in ${time}s`;
   setModalBodyText(text);
   setUpReadonlyOfInput();
